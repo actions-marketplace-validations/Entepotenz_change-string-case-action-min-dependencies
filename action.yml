@@ -1,0 +1,54 @@
+name: "Change String Case minimal dependencies"
+description: "Github Action to make a string lowercase, uppercase, or capitalized; done purely in shell"
+author: <Entepotenz>
+
+inputs:
+  string:
+    description: string to convert
+    required: true
+outputs:
+  lowercase:
+    description: The input string, with any uppercase characters replaced with lowercase ones
+    value: ${{ steps.lowercase_function.outputs.lowercase }}
+    # value: ${{ steps.run-script.outputs.lowercase }}
+  uppercase:
+    description: The input string, with any lowercase characters replaced with uppercase ones
+    value: ${{ steps.uppercase_function.outputs.uppercase }}
+    # value: ${{ steps.run-script.outputs.uppercase }}
+  capitalized:
+    description: The input string, with any alphabetical characters lowercase, except for the first character, which is uppercased
+    value: ${{ steps.capitalized_function.outputs.capitalized }}
+    # value: ${{ steps.run-script.outputs.capitalized }}
+runs:
+  using: "composite"
+  steps:
+    # - id: run-script
+    #   run: |
+    #     ${{ github.action_path }}/src/script.sh "${{ inputs.string }}"
+    #   shell: bash
+    - id: lowercase_function
+      run: |
+        result=$(echo '${{ inputs.string }}' | LC_ALL=en_US.UTF-8 tr '[:upper:]' '[:lower:]')
+        echo "lowercase=${result}" >> $GITHUB_OUTPUT
+        echo "lowercase=${result}" >> $GITHUB_ENV
+      shell: bash
+    - id: uppercase_function
+      run: |
+        result=$(echo '${{ inputs.string }}' | LC_ALL=en_US.UTF-8 tr '[:lower:]' '[:upper:]')
+        echo "uppercase=${result}" >> $GITHUB_OUTPUT
+        echo "uppercase=${result}" >> $GITHUB_ENV
+      shell: bash
+    - id: capitalized_function
+      run: |
+        firstCharacter='${{ steps.uppercase_function.outputs.uppercase }}'
+        firstCharacter="${firstCharacter::1}"
+        restOfString='${{ steps.lowercase_function.outputs.lowercase }}'
+        restOfString="${restOfString:1}"
+        result="${firstCharacter}${restOfString}"
+        echo "capitalized=${result}" >> $GITHUB_OUTPUT
+        echo "capitalized=${result}" >> $GITHUB_ENV
+      shell: bash
+
+branding:
+  icon: paperclip
+  color: blue
