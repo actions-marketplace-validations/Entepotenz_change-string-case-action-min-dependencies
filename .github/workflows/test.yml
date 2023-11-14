@@ -30,7 +30,7 @@ jobs:
           ${{ steps.test1.outputs.lowercase != 'xyzzy' || 
             steps.test1.outputs.uppercase != 'XYZZY' ||
             steps.test1.outputs.capitalized != 'Xyzzy' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
               core.setFailed('test1 failed; \
@@ -51,7 +51,7 @@ jobs:
           ${{ steps.test2.outputs.lowercase != 'xyzzy' || 
             steps.test2.outputs.uppercase != 'XYZZY' ||
             steps.test2.outputs.capitalized != 'Xyzzy' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
               core.setFailed('test2 failed; \
@@ -72,7 +72,7 @@ jobs:
           ${{ steps.test3.outputs.lowercase != 'äxöözzx%z' || 
             steps.test3.outputs.uppercase != 'ÄXÖÖZXX%Z' ||
             steps.test3.outputs.capitalized != 'Äxöözzx%z' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
               core.setFailed('test3 failed; \
